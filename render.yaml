@@ -5,13 +5,15 @@ services:
     region: oregon
     plan: free
     buildCommand: |
-      pip install --upgrade pip==23.3.1 setuptools==69.0.2 wheel==0.42.0
-      pip install --only-binary=all -r requirements.txt || pip install --no-deps -r requirements-render.txt
+      python --version
+      pip install --upgrade pip==23.3.1
+      pip install --upgrade setuptools==69.5.1 wheel==0.43.0
+      pip install --only-binary=all --prefer-binary -r BE/requirements-render-safe.txt
     startCommand: |
       cd BE && python start_app.py
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.6
+        value: 3.11.9
       - key: DEBUG
         value: False
       - key: ENVIRONMENT
@@ -20,4 +22,6 @@ services:
         value: 1
       - key: PIP_DISABLE_PIP_VERSION_CHECK
         value: 1
+      - key: PIP_ONLY_BINARY
+        value: ":all:"
     healthCheckPath: /health
