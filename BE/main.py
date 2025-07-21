@@ -46,6 +46,10 @@ url_document_processor = URLDocumentProcessor()
 async def root():
     return {"message": "LLM-Powered Intelligent Query-Retrieval System", "status": "active"}
 
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+
 @app.post("/hackrx/run", response_model=SimplifiedHackRXResponse)
 async def hackrx_run(request: HackRXRequest):
     """
