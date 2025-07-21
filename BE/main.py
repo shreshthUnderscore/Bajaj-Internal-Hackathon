@@ -184,3 +184,5 @@ async def run_submissions(request: RunRequest):
 async def read_root():
     return {"message": "LLM-Powered Intelligent Query Retrieval System is running!"}
 
+httpx==0.27.0
+
