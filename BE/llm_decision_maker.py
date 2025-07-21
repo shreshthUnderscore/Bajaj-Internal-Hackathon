@@ -51,7 +51,7 @@ class LLMDecisionMaker:
 
         prompt = f"""
 You are an intelligent query retrieval system designed for insurance, legal, HR, and compliance domains.
-Your task is to answer user queries based *only* on the provided retrieved document chunks.
+Your task is to first provide a concise answer to the user query, based *only* on the provided retrieved document chunks.
 If the information is not explicitly available in the provided chunks, state that you cannot find the answer in the given context.
 
 After providing the answer, you MUST provide a detailed rationale explaining *why* you arrived at that answer.
@@ -95,7 +95,7 @@ Please provide your response in the specified JSON format.
         prompt = self._construct_prompt(query, retrieved_chunks)
         
         try:
-            # DIAGNOSTIC CHANGE: Removed 'await' to see if generate_content is synchronous
+            # Removed 'await' as per diagnostic, assuming synchronous behavior in your env
             response = self.model.generate_content(
                 contents=[{"role": "user", "parts": [{"text": prompt}]}],
                 generation_config={
@@ -104,7 +104,7 @@ Please provide your response in the specified JSON format.
                         "type": "OBJECT",
                         "properties": {
                             "query": {"type": "STRING"},
-                            "answer": {"type": "STRING"},
+                            "answer": {"type": "STRING"}, # Made 'answer' a property
                             "rationale": {"type": "STRING"},
                             "relevant_chunks_used": {
                                 "type": "ARRAY",
@@ -116,7 +116,8 @@ Please provide your response in the specified JSON format.
                                     }
                                 }
                             }
-                        }
+                        },
+                        "required": ["query", "answer", "rationale", "relevant_chunks_used"] # Added 'required' fields
                     }
                 }
             )
