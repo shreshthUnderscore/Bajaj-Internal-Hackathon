@@ -5,15 +5,19 @@ services:
     region: oregon
     plan: free
     buildCommand: |
-      pip install --upgrade pip setuptools wheel
-      pip install -r requirements.txt
+      pip install --upgrade pip==23.3.1 setuptools==69.0.2 wheel==0.42.0
+      pip install --only-binary=all -r requirements.txt || pip install --no-deps -r requirements-render.txt
     startCommand: |
-      cd BE && python main.py
+      cd BE && python start_app.py
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.9
+        value: 3.11.6
       - key: DEBUG
         value: False
       - key: ENVIRONMENT
         value: production
+      - key: PIP_NO_CACHE_DIR
+        value: 1
+      - key: PIP_DISABLE_PIP_VERSION_CHECK
+        value: 1
     healthCheckPath: /health
